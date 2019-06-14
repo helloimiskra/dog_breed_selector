@@ -53,5 +53,6 @@ class DogBreedSelector::Dog
   
   def self.create_from_size_url(size_array)
     #grabs dog size and breed from scraper
+  end
   
 end

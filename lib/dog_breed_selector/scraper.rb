@@ -1,7 +1,10 @@
 class DogBreedSelector::Scraper
   
   
-  def scrape_from_main(main_url)
+  def self.scrape_from_main
+    
+    doc = Nokogiri::HTML(open("https://www.yourpurebredpuppy.com/dogbreeds/"))
+    binding.pry 
     #grabs urls from main page to go to each size
   end
   

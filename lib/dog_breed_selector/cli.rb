@@ -1,4 +1,9 @@
+
+require_relative './dog.rb'
+require_relative './scraper.rb'
+
 class DogBreedSelector::CLI
+  attr_accessor :dog_sizes
   
   def call
     greeting
@@ -22,6 +27,8 @@ class DogBreedSelector::CLI
       5. Large Dog Breeds (Height: 22-26" tall | Weight: 60-90 lbs)
       6. Giant Dog Breeds (Height: over 26" tall | Weight: over 100 lbs)
       DOC
+    
+    @dog_sizes = DogBreedSelector::Scraper.scrape_from_main
     # @dog_sizes = DogBreedSelector::Dog.all_sizes
   end
   
