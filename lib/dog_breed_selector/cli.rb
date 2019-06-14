@@ -9,7 +9,7 @@ class DogBreedSelector::CLI
   end
   
   def greeting
-    puts "\n\nWoof! Woof!\n\nLooking to adopt a new furry member of the family?\n\nUncertain of which dog breed is best for you and your family?\n\nYou've come to the right place!\n\nSelect a size below:\n\n"
+    puts "\n\nWoof! Woof!\n\nU ´ᴥ` U\n\nLooking to adopt a new furry member of the family?\n\nUncertain of which dog breed is best for you and your family?\n\nYou've come to the right place!\n\nSelect a size below:\n\n"
   end
   
   
@@ -22,6 +22,11 @@ class DogBreedSelector::CLI
       5. Large Dog Breeds (Height: 22-26" tall | Weight: 60-90 lbs)
       6. Giant Dog Breeds (Height: over 26" tall | Weight: over 100 lbs)
       DOC
+    # @dog_sizes = DogBreedSelector::Dog.all_sizes
+  end
+  
+  def list_dog_breeds
+    
   end
   
   def menu
