@@ -24,8 +24,13 @@ class DogBreedSelector::Scraper
   end
   
   def self.scrape_from_main
-    url = "https://www.yourpurebredpuppy.com/dogbreeds/"
+    url = "https://www.yourpurebredpuppy.com/dogbreeds/index-midsize-dog-breeds.html"
     doc = Nokogiri::HTML(open(url))
+    new = Nokogiri::HTML(open("https://www.yourpurebredpuppy.com/reviews/pembrokewelshcorgis.html"))
+    full_desc = new.css('div#article p').text
+    dog_url = doc.css('td a').map{|x| x.attr('href')}
+    dog_breed = doc.css('td a').map{|x| x.text}
+    dog_list = new.css('div.lists').text
     binding.pry 
     #grabs urls from main page to go to each size
   end
