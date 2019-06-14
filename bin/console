@@ -11,4 +11,4 @@ require "dog_breed_selector"
 # Pry.start
 
 require "irb"
-IRB.start(__FILE__)
+IRB.start
