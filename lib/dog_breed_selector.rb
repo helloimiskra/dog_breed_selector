@@ -1,6 +1,2 @@
-require "dog_breed_selector/version"
-
-module DogBreedSelector
-  class Error < StandardError; end
-  # Your code goes here...
-end
+require_relative "./dog_breed_selector/version"
+require_relative "./dog_breed_selector/cli"
