@@ -8,16 +8,15 @@ class DogBreedSelector::Dog
   #   @breed = breed
   # end
   
-  def self.all
-    # puts 
-    # <<-DOC
-    #   1. Tiny Dog Breeds (Height: 5-12" tall | Weight: 3-10 lbs)
-    #   2. Small Dog Breeds (Height: 12-15" tall | Weight: 10-20 lbs)
-    #   3. Midsize Dog Breeds (Height: 15-18" tall | Weight: 20-40 lbs)
-    #   4. Medium Size Dog Breeds (Height: 18 - 22" tall | Weight: 40-60 lbs)
-    #   5. Large Dog Breeds (Height: 22-26" tall | Weight: 60-90 lbs)
-    #   6. Giant Dog Breeds (Height: over 26" tall | Weight: over 100 lbs)
-    #   DOC
+  def self.all_sizes
+    puts <<-DOC
+      1. Tiny Dog Breeds (Height: 5-12" tall | Weight: 3-10 lbs)
+      2. Small Dog Breeds (Height: 12-15" tall | Weight: 10-20 lbs)
+      3. Midsize Dog Breeds (Height: 15-18" tall | Weight: 20-40 lbs)
+      4. Medium Size Dog Breeds (Height: 18 - 22" tall | Weight: 40-60 lbs)
+      5. Large Dog Breeds (Height: 22-26" tall | Weight: 60-90 lbs)
+      6. Giant Dog Breeds (Height: over 26" tall | Weight: over 100 lbs)
+      DOC
    
     dog_one = self.new 
     dog_one.size = "Midsize"

@@ -19,12 +19,13 @@ class DogBreedSelector::CLI
   
   
   def list_dog_sizes
+    
 
-    @dog_sizes = DogBreedSelector::Dog.all
-    @dog_sizes.each.with_index(1) do |dog, i|
-      puts "#{i}. #{dog.breed} #{dog.desc}"
-    end
     # @dog_sizes = DogBreedSelector::Dog.all_sizes
+    # @dog_sizes.each.with_index(1) do |dog, i|
+    #   puts "#{i}. #{dog.breed} #{dog.desc}"
+    # end
+    @dog_sizes = DogBreedSelector::Scraper.scrape_from_main
   end
   
   def list_dog_breeds
@@ -36,27 +37,24 @@ class DogBreedSelector::CLI
      puts "Enter the number of the dog breed size you prefer below or type 'exit'"
     while input != "exit"
       input = gets.strip.downcase
-      case input
-      when "1"
-        puts "Tiny Dog Breeds to choose from..."
-      when "2"
-        puts "Small Dog Breeds to choose from..."
-      when "3"
-        puts "Midsize Dog Breeds to choose from..."
-      when "4"
-        puts "Medium Breeds to choose from..."
-      when "5"
-        puts "Large Dog Breeds to choose from..."
-      when "6"
-        puts "Giant Dog Breeds to choose from..."
-      when "list"
-        list_dog_sizes
-      else 
-        puts "Not sure which size you want? Type list or exit."
-     end
+      
+      if input.to_i > 0 && input.to_i < 7
+        
+        the_dog = @dog_sizes[input.to_i-1]
+        puts "#{the_dog.breed}'s Temperament"
+        list_dog_sizes[the_dog.breed].each.with_index(1) do |dog, i|
+        puts "#{i}. #{dog.breed} #{dog.desc}"
+      end
+      elsif input === "list"
+      list_dog_sizes
+      elsif input === "exit"
+      goodbye
+    else
+      "Not sure which breed you want? Type 'list' or 'exit'to continue."
     end
   end
-  
+end
+
   def goodbye
   puts "Enjoy the new member of your family!"
   end
