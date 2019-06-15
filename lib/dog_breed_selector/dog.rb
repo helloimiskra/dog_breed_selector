@@ -7,6 +7,7 @@ class DogBreedSelector::Dog
     @breed = dog_info[:breed]
     @breed_url = dog_info[:breed_url]
     @breed_size = dog_info[:breed_size]
+    @desc = nil
     @@all << self
   end
 
@@ -15,7 +16,7 @@ class DogBreedSelector::Dog
       'Tiny Dog Breeds (Height: 5-12" tall | Weight: 3-10 lbs)',
       'Small Dog Breeds (Height: 12-15" tall | Weight: 10-20 lbs)',
       'Midsize Dog Breeds (Height: 15-18" tall | Weight: 20-40 lbs)',
-      'Medium Size Dog Breeds (Height: 18 - 22" tall | Weight: 40-60 lbs)',
+      'Medium Dog Breeds (Height: 18 - 22" tall | Weight: 40-60 lbs)',
       'Large Dog Breeds (Height: 22-26" tall | Weight: 60-90 lbs)',
       'Giant Dog Breeds (Height: over 26" tall | Weight: over 100 lbs)'
     ]
@@ -40,13 +41,20 @@ class DogBreedSelector::Dog
 
 
   def add_dog_desc(dog_details)
-    @list = dog_details[:list]
+    @desc = dog_details[:list]
   end
 
   def self.all
     @@all
   end
 
+  def self.all_breeds_by_size(size)
+    self.all.map do |dog|
+      if dog.size == size
+        dog.breed
+      end
+    end
+  end
 
   def self.create_from_size_url(size_array)
     #grabs dog size and breed from scraper

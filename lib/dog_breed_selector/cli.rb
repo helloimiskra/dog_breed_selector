@@ -3,7 +3,8 @@ require_relative './dog.rb'
 require_relative './scraper.rb'
 
 class DogBreedSelector::CLI
-  attr_accessor :dog_sizes, :breed, :desc
+  attr_accessor :dog_sizes, :breed, :desc, :dog_breeds
+  BASE_PATH = "https://www.yourpurebredpuppy.com/dogbreeds/"
 
   def call
     greeting
@@ -19,13 +20,14 @@ class DogBreedSelector::CLI
 
 
   def list_dog_sizes
-    @dog_sizes = DogBreedSelector::Dog.all_sizes
-    @dog_sizes.each.with_index(1) do |dog, i|
-       puts "#{i}. #{dog}"
-     end
+    @dog_sizes = DogBreedSelector::Scraper.scrape_from_size
+    # @dog_sizes.each.with_index(1) do |dog, i|
+    #    puts "#{i}. #{dog}"
+    #  end
   end
 
   def list_dog_breeds
+    @dog_breeds = DogBreedSelector::Dog.all_breeds_by_size
 
   end
 
