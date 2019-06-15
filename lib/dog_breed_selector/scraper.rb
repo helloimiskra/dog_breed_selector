@@ -11,7 +11,7 @@ class DogBreedSelector::Scraper
       doc.css('td').collect.with_index do |dog, i|
         dog_info = {
           :breed => doc.css('td a').map{|x| x.text}.delete_if{|x| x.include?'breeds'}[i],
-          :breed_url => doc.css('td a').map{|x| x.attr('href')}.delete_if{|x| x.include?'breeds'}[i]
+          :breed_url => doc.css('td a').map{|x| x.attr('href')}.delete_if{|x| x.include?'breeds'}[i],
           :breed_size => dog.css("div#content p#breadcrumbs.hide-mobile").text[i]
         }
         dog_info
@@ -23,8 +23,8 @@ class DogBreedSelector::Scraper
       new = Nokogiri::HTML(open(breed_url))
       dog_details = {
         :list => new.css('div.lists').text
-      }
-      dog_details
+        }
+        dog_details
     end
 
   def self.all_sizes

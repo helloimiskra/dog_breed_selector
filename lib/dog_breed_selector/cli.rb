@@ -19,16 +19,10 @@ class DogBreedSelector::CLI
 
 
   def list_dog_sizes
-
-
-    # @dog_sizes = DogBreedSelector::Dog.all_sizes
-    # @dog_sizes.each.with_index(1) do |dog, i|
-    #   puts "#{i}. #{dog.breed} #{dog.desc}"
-    # end
     @dog_sizes = DogBreedSelector::Dog.all_sizes
-    # @dog_sizes.each.with_index(1) do |dog, i|
-    #    puts "#{i}. #{dog.breed} #{dog.desc}"
-    #  end
+    @dog_sizes.each.with_index(1) do |dog, i|
+       puts "#{i}. #{dog}"
+     end
   end
 
   def list_dog_breeds
@@ -41,10 +35,10 @@ class DogBreedSelector::CLI
     while input != "exit"
       input = gets.strip.downcase
       if input.to_i > 0 && input.to_i < 7
-        the_dog = @dog_sizes[input.to_i-1]
-        puts "#{the_dog}'s Temperament"
+        breed_size = @dog_sizes[input.to_i-1]
+        puts "#{dog}"
         list_dog_sizes[the_dog].each.with_index(1) do |the_dog, i|
-        puts "#{i}. #{dog.breed} #{dog.desc}"
+        puts "#{i}. #{dog}"
         end
       elsif input === "list"
       list_dog_sizes
