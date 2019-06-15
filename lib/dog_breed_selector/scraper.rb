@@ -32,8 +32,8 @@ class DogBreedSelector::Scraper
       new = Nokogiri::HTML(open(breed_url))
       dog_details = {
         :list => new.css('div.lists').text
-        }
-        dog_details
+      }
+      dog_details
     end
 
 end

@@ -4,14 +4,13 @@ require_relative './scraper.rb'
 
 class DogBreedSelector::CLI
   attr_accessor :dog_sizes, :breed, :desc, :dog_breeds
-  BASE_PATH = "https://www.yourpurebredpuppy.com/dogbreeds/"
+
 
   def call
     greeting
     list_dog_sizes
     menu
-    goodbye
-
+    # goodbye
   end
 
   def greeting
@@ -26,34 +25,33 @@ class DogBreedSelector::CLI
     #  end
   end
 
-  def list_dog_breeds
-    @dog_breeds = DogBreedSelector::Dog.all_breeds_by_size
-
+  def list_dog_breeds(size)
+    @dog_breeds = DogBreedSelector::Dog.all_breeds_by_size(size)
   end
 
   def menu
     input = nil
-     puts "Enter the number of the dog breed size you prefer below or type 'exit'"
+    puts "Enter the number of the dog breed size you prefer below or type 'exit'"
     while input != "exit"
       input = gets.strip.downcase
       if input.to_i > 0 && input.to_i < 7
         breed_size = @dog_sizes[input.to_i-1]
         puts "#{dog}"
         list_dog_sizes[the_dog].each.with_index(1) do |the_dog, i|
-        puts "#{i}. #{dog}"
+          puts "#{i}. #{dog}"
         end
       elsif input === "list"
-      list_dog_sizes
+        list_dog_sizes
       elsif input === "exit"
-      goodbye
-    else
-      "Not sure which breed you want? Type 'list' or 'exit'to continue."
+        goodbye
+      else
+        "Not sure which breed you want? Type 'list' or 'exit'to continue."
+      end
     end
   end
-end
 
   def goodbye
-  puts "Enjoy the new member of your family!"
+    puts "Enjoy the new member of your family!"
   end
 
 
