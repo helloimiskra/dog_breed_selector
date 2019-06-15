@@ -19,12 +19,10 @@ class DogBreedSelector::CLI
 
 
   def list_dog_sizes
-    # @dog_sizes = DogBreedSelector::Scraper.scrape_from_size(@size_urls)
-
     main_url = "https://www.yourpurebredpuppy.com/dogbreeds/"
     @size_urls = DogBreedSelector::Scraper.scrape_from_main(main_url)
     @dog_sizes = DogBreedSelector::Scraper.scrape_from_size(@size_urls)
-    @dog_sizes.each.with_index(1) do |dog, i|
+    @dog_sizes.map!.with_index(1) do |dog, i|
       dog.each do |d|
         puts "#{i}. #{d.breed_size}"
       end
@@ -35,23 +33,27 @@ class DogBreedSelector::CLI
     @dog_breeds = DogBreedSelector::Dog.all_breeds_by_size(size)
   end
 
+  def list_qualities(breed)
+    #once it has a breed, should return qualities
+  end
+
   def menu
     input = nil
     puts "Enter the number of the dog breed size you prefer below or type 'exit'"
     while input != "exit"
       input = gets.strip.downcase
       if input.to_i > 0 && input.to_i < 7
-        breed_size = @dog_sizes[input.to_i-1]
-        puts "#{dog}"
-        list_dog_sizes[the_dog].each.with_index(1) do |the_dog, i|
-          puts "#{i}. #{dog}"
+        breed_size = @dog_sizes[input.to_i-1].map{|i| i.breed_size}.join
+        list_dog_breeds(breed_size).each.with_index(1) do |breed_size, i|
+          puts "#{i}. #{breed_size}"
+          puts "Choose the number of the breed you're interested in, or type 'list' to go back to the dog breed sizes."
         end
       elsif input === "list"
         list_dog_sizes
       elsif input === "exit"
         goodbye
       else
-        "Not sure which breed you want? Type 'list' or 'exit'to continue."
+        "Not sure which breed you want? Type 'list' or 'exit' to continue."
       end
     end
   end
