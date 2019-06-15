@@ -28,7 +28,6 @@ class DogBreedSelector::Scraper
             desc
           end.delete_if{|x| x == ""}
             DogBreedSelector::Dog.new(breed, breed_url, breed_size, desc)
-          end
         end
       end
     end

@@ -28,11 +28,12 @@ class DogBreedSelector::Dog
     end.compact.flatten
   end
 
-  def self.desc_by_breed(input)
-    @@all.map{|dog| dog.desc[input]}.uniq
+  def self.desc_by_breed(size_input, breed_input)
+    breed_desc = @@all.map.with_index do |dog, i|
+      dog.desc[size_input]
+    end
+    breed_desc[breed_input]
   end
-
-
 
 
 end
