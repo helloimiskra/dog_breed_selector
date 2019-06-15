@@ -34,7 +34,9 @@ class DogBreedSelector::CLI
   end
 
   def list_qualities(breed)
-    @desc = DogBreedSelector::Dog.all_desc_by_breed(breed)
+    @descriptions = DogBreedSelector::Scraper.scrape_from_profile
+
+    DogBreedSelector::Dog.all_desc_by_breed(breed)
   end
 
   def menu
@@ -49,6 +51,7 @@ class DogBreedSelector::CLI
         end
         puts "Choose the number of the breed you're interested in, or type 'list' to go back to the dog breed sizes."
         binding.pry
+
 
 
         #   input1 = gets.strip.downcase

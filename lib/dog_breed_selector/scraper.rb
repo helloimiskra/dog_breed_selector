@@ -28,7 +28,7 @@ class DogBreedSelector::Scraper
     end
 
     def self.scrape_from_profile
-      breed_urls = DogBreedSelector::Dog.all.map{|d| d.breed_url}.flatten
+      breed_urls = DogBreedSelector::Dog.all.map{|dog| dog.breed_url}.flatten
       breed_urls.map do |url|
         doc = Nokogiri::HTML(open(url))
         @details = doc.css('div.lists').text
@@ -37,7 +37,5 @@ class DogBreedSelector::Scraper
         end
       end
     end
-  #   doc = Nokogiri::HTML(open("https://www.yourpurebredpuppy.com/reviews/americancockerspaniels.html"))
-  #  details = doc.css('div.lists').text
 
 end

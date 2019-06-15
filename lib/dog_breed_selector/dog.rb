@@ -4,7 +4,7 @@ class DogBreedSelector::Dog
 
   @@all = []
 
-  def initialize(breed, breed_url, breed_size, desc = nil)
+  def initialize(breed, breed_url, breed_size, desc = [])
     @breed, @breed_url, @breed_size = breed, breed_url, breed_size
     @desc = desc
     @@all << self
@@ -28,14 +28,15 @@ class DogBreedSelector::Dog
     end.compact.flatten
   end
 
-  # def self.all_desc_by_breed(breed)
-  #   self.all.map do |dogs|
-  #     dogs.breed.map.with_index do |dog, i|
-  #       if dog[i] == breed
-  #         dogs.desc[i]
-  #       end
-  #     end
-  #   end.compact.flatten
+  def self.desc_by_breed(breed)
+    @@all.map.with_index do |dog, i|
+      if dog.breed[i].include?(breed)
+        dog.desc[i]
+      end
+    end.compact
+  end
+
+
 
 
 end
