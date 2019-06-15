@@ -1,26 +1,18 @@
 require_relative './scraper.rb'
 class DogBreedSelector::Dog
-  attr_accessor :size, :breed, :breed_url, :desc
+  attr_accessor :size, :breed, :breed_url, :desc, :breed_size
 
   @@all = []
 
-  def initialize(dog_info)
-    @breed = dog_info[:breed]
-    @breed_url = dog_info[:breed_url]
-    @breed_size = dog_info[:breed_size]
-    @desc = nil
+  def initialize(breed, breed_url, breed_size)
+    @breed, @breed_url, @breed_size = breed, breed_url, breed_size
     @@all << self
   end
 
   def self.all_sizes
-    sizes = [
-      'Tiny Dog Breeds (Height: 5-12" tall | Weight: 3-10 lbs)',
-      'Small Dog Breeds (Height: 12-15" tall | Weight: 10-20 lbs)',
-      'Midsize Dog Breeds (Height: 15-18" tall | Weight: 20-40 lbs)',
-      'Medium Dog Breeds (Height: 18 - 22" tall | Weight: 40-60 lbs)',
-      'Large Dog Breeds (Height: 22-26" tall | Weight: 60-90 lbs)',
-      'Giant Dog Breeds (Height: over 26" tall | Weight: over 100 lbs)'
-    ]
+    @@all.map do |i|
+      i.breed_size
+    end
   end
 
 
