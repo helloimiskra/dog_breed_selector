@@ -27,26 +27,29 @@ class DogBreedSelector::Scraper
       end
     end
 
-
-    # size_urls.map do |url|
-    #   doc = Nokogiri::HTML(open(url))
-    #   doc.css('div#content').map.with_index do |dog, i|
-    #     dog_info = {
-    #       :breed => doc.css('td a').map{|x| x.text}.delete_if{|x| x.include?'breeds'}[i],
-    #       :breed_url => doc.css('td a').map{|x| x.attr('href')}.delete_if{|x| x.include?'breeds'}[i],
-    #       :breed_size => doc.css("h1.clear").text.split("Dog Breed Reviews: ")[i+1]
-    #     }
-    #   end
-
-
-
-    def self.scrape_from_profile(breed_url)
-      breed_url = dog_info[:breed_url]
-      new = Nokogiri::HTML(open(breed_url))
-      dog_details = {
-        :list => new.css('div.lists').text
-      }
-      dog_details
+    breed_urls = DogBreedSelector::Dog.all.map{|d| d.breed_url}.flatten
+    breed_urls.map do |url|
+      doc = Nokogiri::HTML(open(url))
+      details = doc.css('div.lists').text
+      DogBreedSelector::Dog.all do |dogs|
+        dogs.map.with_index do |dog, i|
+          dog.desc[i] << details
+        end
+      end
     end
+
+    def self.scrape_from_profile
+      breed_urls.map do |url|
+        doc = Nokogiri::HTML(open(url))
+        details = doc.css('div.lists').text
+        DogBreedSelector::Dog.all.map do |dog|
+          dog.desc.map.with_index do |dog, i|
+            dog.desc[i] << details
+          end
+        end
+      end
+    end
+  #   doc = Nokogiri::HTML(open("https://www.yourpurebredpuppy.com/reviews/americancockerspaniels.html"))
+  #  details = doc.css('div.lists').text
 
 end
