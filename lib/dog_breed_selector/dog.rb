@@ -28,12 +28,8 @@ class DogBreedSelector::Dog
     end.compact.flatten
   end
 
-  def self.desc_by_breed(breed)
-    @@all.map.with_index do |dog, i|
-      if dog.breed[i].include?(breed)
-        dog.desc[i]
-      end
-    end.compact
+  def self.desc_by_breed(input)
+    @@all.map{|dog| dog.desc[input]}.uniq
   end
 
 

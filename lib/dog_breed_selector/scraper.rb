@@ -4,7 +4,7 @@ require 'pry'
 
 require_relative './dog.rb'
 class DogBreedSelector::Scraper
-    attr_accessor :breed_url, :size_urls
+    attr_accessor :breed_url, :size_urls, :desc
 
     main_url = "https://www.yourpurebredpuppy.com/dogbreeds/"
 
@@ -20,22 +20,28 @@ class DogBreedSelector::Scraper
         breeds_doc = doc.css('div#content')
         breeds_doc.map do |doc|
           breed = doc.css('td a').map{|x| x.text}.delete_if{|x| x.include?'breeds'}
-          breed_url = doc.css('td a').map{|x| x.attr('href')}.delete_if{|x| x.include?'breeds'}
           breed_size = doc.css("h1.clear").text.split("Dog Breed Reviews: ")[1]
-          DogBreedSelector::Dog.new(breed, breed_url, breed_size)
+          breed_url = doc.css('td a').map{|x| x.attr('href')}.delete_if{|x| x.include?'breeds'}
+          desc = breed_url.map do |url|
+            doc_two = Nokogiri::HTML(open(url))
+            desc = doc_two.css('div.lists').text
+            desc
+          end.delete_if{|x| x == ""}
+            DogBreedSelector::Dog.new(breed, breed_url, breed_size, desc)
+          end
         end
       end
     end
 
-    def self.scrape_from_profile
-      breed_urls = DogBreedSelector::Dog.all.map{|dog| dog.breed_url}.flatten
-      breed_urls.map do |url|
-        doc = Nokogiri::HTML(open(url))
-        @details = doc.css('div.lists').text
-        DogBreedSelector::Dog.all.map do |dog|
-          dog.desc << @details
-        end
-      end
-    end
+    # def self.scrape_from_profile
+    #   breed_urls = DogBreedSelector::Dog.all.map{|dog| dog.breed_url}.flatten
+    #   breed_urls.map do |url|
+    #     doc = Nokogiri::HTML(open(url))
+    #     @details = doc.css('div.lists').text
+    #     DogBreedSelector::Dog.all.map do |dog|
+    #       dog.desc << @details
+    #     end
+    #   end
+    # end
 
 end
