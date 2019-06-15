@@ -35,8 +35,6 @@ class DogBreedSelector::CLI
 
   def list_qualities(breed)
     @desc = DogBreedSelector::Dog.all_desc_by_breed(breed)
-
-    #once it has a breed, should return qualities
   end
 
   def menu
@@ -48,14 +46,19 @@ class DogBreedSelector::CLI
         breed_size = @dog_sizes[input.to_i-1].map{|i| i.breed_size}.join
         list_dog_breeds(breed_size).each.with_index(1) do |breed_size, i|
           puts "#{i}. #{breed_size}"
-          end
-          puts "Choose the number of the breed you're interested in, or type 'list' to go back to the dog breed sizes."
-
-          input1 = gets.strip.downcase
-          if input.to_i > 0 && input.to_i < list_dog_breeds(breed_size).length
-            breed = @dog_breeds[input.to_i-1]
-
+        end
+        puts "Choose the number of the breed you're interested in, or type 'list' to go back to the dog breed sizes."
         binding.pry
+
+
+        #   input1 = gets.strip.downcase
+        #   if input.to_i > 0 && input.to_i < list_dog_breeds(breed_size).length
+        #     breed = @dog_breeds[input.to_i-1]
+        #     binding.pry
+        #   end
+        # end
+
+
       elsif input === "list"
         list_dog_sizes
       elsif input === "exit"
@@ -69,3 +72,5 @@ class DogBreedSelector::CLI
   def goodbye
     puts "Enjoy the new member of your family!"
   end
+
+end
