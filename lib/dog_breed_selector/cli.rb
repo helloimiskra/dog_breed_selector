@@ -3,7 +3,7 @@ require_relative './dog.rb'
 require_relative './scraper.rb'
 
 class DogBreedSelector::CLI
-  attr_accessor :dog_sizes, :breed, :desc, :dog_breeds, :size_urls, :breed_size, :breed_url
+  attr_accessor :dog_sizes, :breed, :desc, :dog_breeds, :size_urls, :breed_size, :breed_url, :input_one, :input_two
 
 
   def call
@@ -14,7 +14,9 @@ class DogBreedSelector::CLI
   end
 
   def greeting
-    puts "\n\nWoof! Woof!\n\nU ´ᴥ` U\n\nLooking to adopt a new furry member of the family?\n\nUncertain of which dog breed is best for you and your family?\n\nYou've come to the right place!\n\nSelect a size below:\n\n"
+    puts "\n\nWoof! Woof!\n\nU ´ᴥ` U\n\nLooking to adopt a new furry member of the family?\n\nUncertain of which dog breed is best for you and your family?\n\nYou've come to the right place!\n\n"
+    puts "\nNow loading...\n"
+    puts "\n\nSelect a size below:\n\n"
   end
 
 
@@ -33,38 +35,40 @@ class DogBreedSelector::CLI
     @dog_breeds = DogBreedSelector::Dog.all_breeds_by_size(size)
   end
 
-  def list_qualities(breed)
-    @descriptions = DogBreedSelector::Scraper.scrape_from_profile
-
-    DogBreedSelector::Dog.all_desc_by_breed(breed)
+  def list_qualities(input_one, input_two)
+    DogBreedSelector::Dog.desc_by_breed(input_one.to_i-1, input_two.to_i-1)
+    binding.pry
   end
 
   def menu
-    input = nil
+    input_one = nil
     puts "Enter the number of the dog breed size you prefer below or type 'exit'"
-    while input != "exit"
-      input = gets.strip.downcase
-      if input.to_i > 0 && input.to_i < 7
-        breed_size = @dog_sizes[input.to_i-1].map{|i| i.breed_size}.join
+
+    while input_one != "exit"
+      input_one = gets.strip.downcase
+
+      if input_one.to_i > 0 && input_one.to_i < 7
+        breed_size = @dog_sizes[input_one.to_i-1].map{|i| i.breed_size}.join
         list_dog_breeds(breed_size).each.with_index(1) do |breed_size, i|
           puts "#{i}. #{breed_size}"
         end
         puts "Choose the number of the breed you're interested in, or type 'list' to go back to the dog breed sizes."
-        binding.pry
-
-
-
-        #   input1 = gets.strip.downcase
-        #   if input.to_i > 0 && input.to_i < list_dog_breeds(breed_size).length
-        #     breed = @dog_breeds[input.to_i-1]
-        #     binding.pry
-        #   end
-        # end
-
-
-      elsif input === "list"
+      input_two = nil
+      while input_two != "exit"
+        input_two = gets.strip.downcase
+        if input_two.to_i > 0 && input_two.to_i < list_dog_breeds(breed_size).length
+          list_qualities(input_one.to_i-1, input_two.to_i-1)
+        elsif input_two === "list"
+          list_dog_sizes
+        elsif input_two === "exit"
+            goodbye
+        else
+          "Not sure which breed you want? Type a number, 'list' or 'exit' to continue."
+        end
+      end
+    elsif input_one === "list"
         list_dog_sizes
-      elsif input === "exit"
+      elsif input_one === "exit"
         goodbye
       else
         "Not sure which breed you want? Type 'list' or 'exit' to continue."

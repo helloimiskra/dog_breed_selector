@@ -33,6 +33,9 @@ class DogBreedSelector::Dog
       dog.desc[size_input]
     end
     breed_desc[breed_input]
+
+
+    x = DogBreedSelector::Dog.all.map.with_index do |x| x.desc[2] end.flatten
   end
 
 
