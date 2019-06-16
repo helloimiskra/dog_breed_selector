@@ -3,14 +3,14 @@ require_relative './dog.rb'
 require_relative './scraper.rb'
 
 class DogBreedSelector::CLI
-  attr_accessor :dog_sizes, :dog_breeds, :size_urls, :breed_size, :breed_url, :dogs, :list
+  attr_accessor :dog_sizes, :dog_breeds, :size_urls, :breed_size, :dogs
 
   def call
     self.greeting
     @dog_sizes = DogBreedSelector::Dog.load_sizes
     loop do
       user_input = main_menu
-        if user_input === "exit" || user_input.include?("n")
+        if user_input.include?("x")
           goodbye
           return
         else
@@ -22,7 +22,7 @@ class DogBreedSelector::CLI
   end
 
   def main_menu
-    puts "Type any key to continue, or 'n' or 'exit' to exit."
+    puts "Type any key to continue, or 'x' to exit."
     input = gets.strip.downcase
     return input
   end
@@ -34,7 +34,7 @@ class DogBreedSelector::CLI
   end
 
   def choose_dog_size
-    puts "Enter the number of the dog breed size you prefer below or type 'exit' "
+    puts "Enter the number of the dog breed size you prefer below or type 'x' to exit."
     @input_one = gets.strip.to_i-1
     @breed_size = @dog_sizes.map{|x| x.breed}[@input_one]
     self.list_all_breeds
@@ -45,7 +45,7 @@ class DogBreedSelector::CLI
   end
 
   def choose_dog_breed
-	   puts "Choose the number of the breed you're interested in, or type 'exit' to exit."
+	   puts "Choose the number of the breed you're interested in, or type 'x' to exit."
      @input_two = gets.strip.to_i-1
      list = list_qualities(@input_one, @input_two).each {|desc| puts "\nIf you'd like a dog who ... #{desc}\n"}
      if list == []
@@ -70,7 +70,5 @@ class DogBreedSelector::CLI
   def goodbye
     puts "Enjoy the new member of your family!"
   end
-
-
 
 end
