@@ -24,16 +24,14 @@ class DogBreedSelector::CLI
     main_url = "https://www.yourpurebredpuppy.com/dogbreeds/"
     @size_urls = DogBreedSelector::Scraper.scrape_from_main(main_url)
     @dog_sizes = DogBreedSelector::Scraper.scrape_from_size(@size_urls)
-    @dog_sizes.map!.with_index(1) do |dog, i|
-      dog.each do |d|
-        puts "#{i}. #{d.breed_size}"
-      end
+    @dog_sizes.map.with_index(1) do |dog, i|
+      puts "#{i}. #{dog.breed_size}"
     end
   end
 
-  def list_dog_breeds(size)
-    @dog_breeds = DogBreedSelector::Dog.all_breeds_by_size(size)
-  end
+  # def list_dog_breeds(size)
+  #   @dog_breeds = DogBreedSelector::Dog.all_breeds_by_size(size)
+  # end
 
   def list_qualities(input_one, input_two)
     DogBreedSelector::Dog.desc_by_breed(input_one.to_i-1, input_two.to_i-1)
@@ -48,8 +46,8 @@ class DogBreedSelector::CLI
       input_one = gets.strip.downcase
 
       if input_one.to_i > 0 && input_one.to_i < 7
-        breed_size = @dog_sizes[input_one.to_i-1].map{|i| i.breed_size}.join
-        list_dog_breeds(breed_size).each.with_index(1) do |breed_size, i|
+        breed_size = @dog_sizes.map{|x| x.breed}[input_one.to_i-1]
+        breed_size.map.with_index(1) do |breed_size, i|
           puts "#{i}. #{breed_size}"
         end
         puts "Choose the number of the breed you're interested in, or type 'list' to go back to the dog breed sizes."
