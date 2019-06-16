@@ -4,7 +4,7 @@ require_relative './scraper.rb'
 
 class DogBreedSelector::CLI
   attr_accessor :dog_sizes, :dog_breeds, :size_urls, :breed_size, :breed_url, :dogs, :list
-  
+
   def call
     self.greeting
     @dog_sizes = DogBreedSelector::Dog.load_sizes
@@ -26,7 +26,6 @@ class DogBreedSelector::CLI
     input = gets.strip.downcase
     return input
   end
-
 
   def list_dog_sizes
     @dogs = @dog_sizes.map.with_index(1) do |dog, i|
@@ -54,12 +53,12 @@ class DogBreedSelector::CLI
      else
        list
      end
-   end 
+   end
 
    def list_qualities(input_one, input_two)
      DogBreedSelector::Dog.desc_by_breed(input_one, input_two)
    end
-   
+
    def greeting
     puts "\n\nWoof! Woof!\n\nU ´ᴥ` U\n\n"
     sleep(5)
