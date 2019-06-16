@@ -20,22 +20,16 @@ class DogBreedSelector::Dog
     end
   end
 
-  def self.all_breeds_by_size(size)
-    @@all.map do |dog|
-      if dog.breed_size == size
-        dog.breed
-      end
-    end.compact.flatten
-  end
+  # def self.all_breeds_by_size(size)
+  #   @@all.map do |dog|
+  #     if dog.breed_size == size
+  #       dog.breed
+  #     end
+  #   end.compact.flatten
+  # end
 
   def self.desc_by_breed(size_input, breed_input)
-    breed_desc = @@all.map.with_index do |dog, i|
-      dog.desc[size_input]
-    end
-    breed_desc[breed_input]
-
-
-    x = DogBreedSelector::Dog.all.map.with_index do |x| x.desc[2] end.flatten
+    @@all.map{|dog| dog.desc}[size_input][breed_input]
   end
 
 

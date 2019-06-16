@@ -34,8 +34,7 @@ class DogBreedSelector::CLI
   # end
 
   def list_qualities(input_one, input_two)
-    DogBreedSelector::Dog.desc_by_breed(input_one.to_i-1, input_two.to_i-1)
-    binding.pry
+    DogBreedSelector::Dog.desc_by_breed(input_one, input_two)
   end
 
   def menu
@@ -54,8 +53,31 @@ class DogBreedSelector::CLI
       input_two = nil
       while input_two != "exit"
         input_two = gets.strip.downcase
-        if input_two.to_i > 0 && input_two.to_i < list_dog_breeds(breed_size).length
-          list_qualities(input_one.to_i-1, input_two.to_i-1)
+        if input_two.to_i > 0 && input_two.to_i < breed_size.length
+          list_qualities(input_one.to_i-1, input_two.to_i-1).each {|desc| puts "\nIf you'd like a dog who ...\n #{desc}"}
+        end
+          puts "Type 'y' if you'd like this breed, \n'n' if you'd want to go back to the breed list for this size, \n'list' to display breed sizes again,\nor 'exit' to exit."
+        input_three = nil
+        while input_three != "exit"
+          input_three = gets.strip.downcase
+
+          if input_three == 'y'
+            goodbye
+          elsif input_three == 'n'
+            breed_size = @dog_sizes.map{|x| x.breed}[input_one.to_i-1]
+            breed_size.map.with_index(1) do |breed_size, i|
+              puts "#{i}. #{breed_size}"
+            end
+            puts "Choose the number of the breed you're interested in, or type 'list' to go back to the dog breed sizes."
+          elsif input_three == "list"
+            list_dog_sizes
+          elsif input_three == "exit"
+            goodbye
+          else
+            "Not sure? Please type 'y', 'n', 'list', or 'exit' to continue."
+          end
+      end
+
         elsif input_two === "list"
           list_dog_sizes
         elsif input_two === "exit"
@@ -64,14 +86,13 @@ class DogBreedSelector::CLI
           "Not sure which breed you want? Type a number, 'list' or 'exit' to continue."
         end
       end
-    elsif input_one === "list"
+      elsif input_one === "list"
         list_dog_sizes
       elsif input_one === "exit"
         goodbye
       else
         "Not sure which breed you want? Type 'list' or 'exit' to continue."
       end
-    end
   end
 
   def goodbye
