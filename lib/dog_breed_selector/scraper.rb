@@ -32,15 +32,4 @@ class DogBreedSelector::Scraper
       end
     end
 
-    # def self.scrape_from_profile
-    #   breed_urls = DogBreedSelector::Dog.all.map{|dog| dog.breed_url}.flatten
-    #   breed_urls.map do |url|
-    #     doc = Nokogiri::HTML(open(url))
-    #     @details = doc.css('div.lists').text
-    #     DogBreedSelector::Dog.all.map do |dog|
-    #       dog.desc << @details
-    #     end
-    #   end
-    # end
-
 end

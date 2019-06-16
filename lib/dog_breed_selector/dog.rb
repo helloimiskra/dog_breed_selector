@@ -5,8 +5,7 @@ class DogBreedSelector::Dog
   @@all = []
 
   def initialize(breed, breed_url, breed_size, desc = [])
-    @breed, @breed_url, @breed_size = breed, breed_url, breed_size
-    @desc = desc
+    @breed, @breed_url, @breed_size, @desc = breed, breed_url, breed_size, desc
     @@all << self
   end
 
@@ -20,13 +19,12 @@ class DogBreedSelector::Dog
     end
   end
 
-  # def self.all_breeds_by_size(size)
-  #   @@all.map do |dog|
-  #     if dog.breed_size == size
-  #       dog.breed
-  #     end
-  #   end.compact.flatten
-  # end
+  def self.load_sizes
+    main_url = "https://www.yourpurebredpuppy.com/dogbreeds/"
+    size_urls = DogBreedSelector::Scraper.scrape_from_main(main_url)
+    dog_sizes = DogBreedSelector::Scraper.scrape_from_size(size_urls)
+    dog_sizes
+  end
 
   def self.desc_by_breed(size_input, breed_input)
     @@all.map{|dog| dog.desc}[size_input][breed_input]
