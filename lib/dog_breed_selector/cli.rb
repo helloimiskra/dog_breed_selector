@@ -3,7 +3,7 @@ require_relative './dog.rb'
 require_relative './scraper.rb'
 
 class DogBreedSelector::CLI
-  attr_accessor :dog_sizes, :breed, :desc, :dog_breeds, :size_urls, :breed_size, :breed_url, :dogs, :list
+  attr_accessor :dog_sizes, :dog_breeds, :size_urls, :breed_size, :breed_url, :dogs, :list
   
   def call
     self.greeting
@@ -22,7 +22,7 @@ class DogBreedSelector::CLI
   end
 
   def main_menu
-    puts "Type 'y' to see more, or 'n' or 'exit' to exit."
+    puts "Type any key to continue, or 'n' or 'exit' to exit."
     input = gets.strip.downcase
     return input
   end
@@ -48,7 +48,12 @@ class DogBreedSelector::CLI
   def choose_dog_breed
 	   puts "Choose the number of the breed you're interested in, or type 'exit' to exit."
      @input_two = gets.strip.to_i-1
-     list_qualities(@input_one, @input_two).each {|desc| puts "\nIf you'd like a dog who ... #{desc}\n"}
+     list = list_qualities(@input_one, @input_two).each {|desc| puts "\nIf you'd like a dog who ... #{desc}\n"}
+     if list == []
+       puts "There is no available information for this breed at the moment. Please try another."
+     else
+       list
+     end
    end 
 
    def list_qualities(input_one, input_two)

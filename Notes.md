@@ -59,7 +59,8 @@ class DogBreedSelector::CLI
 
 
 
-            input_three = nil
+            input_three y
+            = nil
             while input_three != "exit"
               input_three = gets.strip.downcase
               if input_three == 'y'
