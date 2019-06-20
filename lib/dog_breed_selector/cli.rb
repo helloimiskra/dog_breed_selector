@@ -55,6 +55,9 @@ class DogBreedSelector::CLI
      end
    end
 
+   #breed.rb one object per breed (@name, @size, @desc (string), @url)
+   #
+
    def list_qualities(input_one, input_two)
      DogBreedSelector::Dog.desc_by_breed(input_one, input_two)
    end
