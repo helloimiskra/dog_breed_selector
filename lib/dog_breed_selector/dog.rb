@@ -34,4 +34,11 @@ class DogBreedSelector::Dog
     @@all.clear
   end
 
+  def self.find_or_name(name)
+    breed = @@all.find {|breed| breed.name == name}
+    if breed == nil
+      breed.name = name
+    end
+  end
+
 end

@@ -3,13 +3,13 @@ require_relative './dog.rb'
 require_relative './scraper.rb'
 
 class DogBreedSelector::CLI
-  attr_accessor :dog_sizes, :dog_breeds, :size_urls, :breed_size, :dogs
+  attr_accessor :dog_sizes, :dog_breeds, :size_urls, :breed_size, :dogs, :breed_names
 
   def call
     self.greeting
     main_url = "https://www.yourpurebredpuppy.com/dogbreeds/"
-    size_urls = DogBreedSelector::Scraper.scrape_from_main(main_url)
-    @dog_sizes = DogBreedSelector::Scraper.scrape_from_size(size_urls)
+    @size_urls = DogBreedSelector::Scraper.scrape_size_urls(main_url)
+    @dog_sizes = DogBreedSelector::Scraper.scrape_size_names(size_urls)
     loop do
       user_input = main_menu
         if user_input.include?("x")
@@ -30,38 +30,51 @@ class DogBreedSelector::CLI
   end
 
   def list_dog_sizes
-    @dog_sizes.map.with_index(1) do |dog, i|
-      puts "#{i}. #{dog}"
+    @dog_sizes.map.with_index(1) do |size, i|
+      puts "#{i}. #{size}"
     end
   end
 
   def choose_dog_size
     puts "Enter the number of the dog breed size you prefer below or type 'x' to exit."
     @input_one = gets.strip.to_i-1
-    @breed_size = @dog_sizes.map{|x| x.breed}[@input_one]
-    self.list_all_breeds
+    @size = @dog_sizes[@input_one]
+    self.list_all_breeds(@size_urls, @size)
   end
 
-  def list_all_breeds
-    @breed_size.map.with_index(1){|breed_size, i| puts "#{i}. #{breed_size}"}
+  def list_all_breeds(size_urls, size)
+    @breed_names = DogBreedSelector::Scraper.scrape_breed_names(size_urls, size)
+    @breed_names.map.with_index(1) do |breed, i|
+      puts "#{i}. #{breed}"
+    end
   end
 
   def choose_dog_breed
 	   puts "Choose the number of the breed you're interested in, or type 'x' to exit."
      @input_two = gets.strip.to_i-1
-     list = list_qualities(@input_one, @input_two).each {|desc| puts "\nIf you'd like a dog who ... #{desc}\n"}
+     @breed = @breed_names[@input_two]
+     list = list_qualities(@breed_url, @breed_names, @breed).map{|list| puts "\nIf you'd like a dog who ... #{list}"}
      if list == []
        puts "There is no available information for this breed at the moment. Please try another."
      else
        list
      end
    end
+   #
+   #
+  #    each {|desc| puts "\nIf you'd like a dog who ... #{desc}\n"}
+  #    if list == []
+  #      puts "There is no available information for this breed at the moment. Please try another."
+  #    else
+  #      list
+  #    end
+  #  end
 
    #breed.rb one object per breed (@name, @size, @desc (string), @url)
    #
 
-   def list_qualities(input_one, input_two)
-     DogBreedSelector::Dog.desc_by_breed(input_one, input_two)
+   def list_qualities(breed_url, breed_names, breed)
+     DogBreedSelector::Scraper.scrape_from_breed_url(breed_url, breed_names, breed)
    end
 
    def greeting
