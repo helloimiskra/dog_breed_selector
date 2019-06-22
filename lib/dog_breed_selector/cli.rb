@@ -7,7 +7,9 @@ class DogBreedSelector::CLI
 
   def call
     self.greeting
-    @dog_sizes = DogBreedSelector::Dog.load_sizes
+    main_url = "https://www.yourpurebredpuppy.com/dogbreeds/"
+    size_urls = DogBreedSelector::Scraper.scrape_from_main(main_url)
+    @dog_sizes = DogBreedSelector::Scraper.scrape_from_size(size_urls)
     loop do
       user_input = main_menu
         if user_input.include?("x")
@@ -28,8 +30,8 @@ class DogBreedSelector::CLI
   end
 
   def list_dog_sizes
-    @dogs = @dog_sizes.map.with_index(1) do |dog, i|
-      puts "#{i}. #{dog.breed_size}"
+    @dog_sizes.map.with_index(1) do |dog, i|
+      puts "#{i}. #{dog}"
     end
   end
 
@@ -64,9 +66,9 @@ class DogBreedSelector::CLI
 
    def greeting
     puts "\n\nWoof! Woof!\n\nU ´ᴥ` U\n\n"
-    sleep(5)
+    # sleep(5)
     puts "Looking to adopt a new furry member of the family?\n\nUncertain of which dog breed is best for you and your family?\n\nYou've come to the right place!\n\n"
-    sleep(5)
+    # sleep(5)
     puts "With 180 dog breeds to choose from, the Dog Breed Selector will help you make the right choice!\n\nPlease wait a few minutes for the application to load."
   end
 

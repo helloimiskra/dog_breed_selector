@@ -4,7 +4,7 @@ class DogBreedSelector::Dog
 
   @@all = []
 
-  def initialize(breed, breed_url, breed_size, desc = [])
+  def initialize(breed_size = nil, breed = nil, breed_url = nil, desc = nil)
     @breed, @breed_url, @breed_size, @desc = breed, breed_url, breed_size, desc
     @@all << self
   end
@@ -30,5 +30,8 @@ class DogBreedSelector::Dog
     @@all.map{|dog| dog.desc}[size_input][breed_input]
   end
 
+  def self.delete_all
+    @@all.clear
+  end
 
 end
