@@ -8,6 +8,12 @@ class DogBreedSelector::Scraper
 
     main_url = "https://www.yourpurebredpuppy.com/dogbreeds/"
 
+    # #iterate the tds .css(td) each, a.text, a.href, array of objects with information
+    # #not using instance variables if you dont have to
+    # #if statement for number not wanted
+    # #fri-sun soft requirement (21-23) Monday morn.
+
+
     def self.scrape_size_urls(main_url)
       doc = Nokogiri::HTML(open(main_url))
       size_urls = doc.css('tr td a').map{|x| x.attr('href') if x.attr('href').include?('index')}.uniq!.compact
@@ -15,39 +21,29 @@ class DogBreedSelector::Scraper
     end
 
     def self.scrape_size_names(size_urls)
-      @breed_size = size_urls.map do |url|
+      size_urls.map do |url|
         doc = Nokogiri::HTML(open(url))
+          dogs = []
           doc.css('div#content').map do |doc|
-          doc.css("h1.clear").text.split("Dog Breed Reviews: ")[1]
+          breed_size = doc.css("h1.clear").text.split("Dog Breed Reviews: ")[1]
+          doc.css('tr td').map do |dog|
+            breed_name = dog.css('a').text
+            breed_url  = "#{dog.css('a').attr('href')}"
+            dogs << {breed: breed_name, size: breed_size, url: breed_url}
+          end
         end
-      end.flatten
-    end
+        dogs
+      end
 
-    def self.scrape_breed_names(size_urls, size)
-      size_urls.map.with_index do |url, i|
-        if @breed_size[i] == size
-          doc = Nokogiri::HTML(open(url))
-          breed_names = doc.css('tr td').collect{|a| a.text}.delete_if{|x| x.include?'breeds'}.map{|n| n.gsub("\n\n", '')}
-          @breed_url = doc.css('tr td a').map{|x| x.attr('href')}.delete_if{|x| x.include?'breeds'}
-        end
-        breed_names
-      end.compact.flatten
-    end
-
-    def self.scrape_from_breed_url(breed_url, breed_names, breed)
-      @breed_url.map.with_index do |url, i|
-        if breed_names[i] == breed
-          doc = Nokogiri::HTML(open(url))
-          list = doc.css('div.lists').collect{|a| a.text}
-        end
-      end.compact.flatten
-    end
+      def self.scrape_breed_page(breed_url)
+        dog = {}
+        breed_page = Nokogiri::HTML(open(breed_url))
+        list = breed_page.css('div.lists').text
+        dog[:desc] = list
+        dog
+      end
 
 
-    # #iterate the tds .css(td) each, a.text, a.href, array of objects with information
-    # #not using instance variables if you dont have to
-    # #if statement for number not wanted
-    # #fri-sun soft requirement (21-23) Monday morn.
 
 
 
