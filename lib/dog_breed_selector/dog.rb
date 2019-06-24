@@ -36,8 +36,8 @@ class DogBreedSelector::Dog
   end
 
   def add_dog_desc(desc)
-    dog.each do |desc, list|
-      self.send("#{desc}=", list)
+    desc.each do |attr, value|
+      self.send("#{attr}=", value)
     end
     self
   end

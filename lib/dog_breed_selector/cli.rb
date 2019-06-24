@@ -3,7 +3,7 @@ require_relative './dog.rb'
 require_relative './scraper.rb'
 
 class DogBreedSelector::CLI
-  attr_accessor :dog_sizes, :dog_breeds, :size_urls, :breed_size, :dogs, :breed_names
+  attr_accessor :breed_names
 
   MAIN_URL = "https://www.yourpurebredpuppy.com/dogbreeds/"
 
@@ -49,8 +49,8 @@ class DogBreedSelector::CLI
   end
 
   def list_all_breeds(size)
-    breed_names = DogBreedSelector::Dog.list_breeds(size)
-    breed_names.map.with_index(1) do |breed, i|
+    @breed_names = DogBreedSelector::Dog.list_breeds(size)
+    @breed_names.map.with_index(1) do |breed, i|
       puts "#{i}. #{breed}"
     end
   end
@@ -58,7 +58,7 @@ class DogBreedSelector::CLI
   def choose_and_show_dog_breed
 	   puts "Choose the number of the breed you're interested in, or type 'x' to exit."
      input_two = gets.strip.to_i-1
-     breed = breed_names[input_two]
+     breed = @breed_names[input_two]
      self.add_qualities(breed)
      self.list_qualities(breed)
    end
@@ -67,9 +67,10 @@ class DogBreedSelector::CLI
    #
 
    def add_qualities(breed)
-     DogBreedSelector::Dog.all.each do |dog|
+     DogBreedSelector::Dog.all.select do |dog|
        if dog.breed == breed
-         dog = DogBreedSelect::Scraper.scrape_breed_page(dog.breed_url)
+         dog.breed_url
+         desc = DogBreedSelector::Scraper.scrape_breed_page(dog.breed_url)
          dog.add_dog_desc(desc)
        end
      end
