@@ -44,8 +44,12 @@ class DogBreedSelector::CLI
   def choose_dog_size
     puts "Enter the number of the dog breed size you prefer below or type 'x' to exit."
     input_one = gets.strip.to_i-1
-    size = DogBreedSelector::Dog.all_sizes[input_one]
-    self.list_all_breeds(size)
+    if input_one >= 6 || input_one == 0
+      self.choose_dog_size
+    else
+      size = DogBreedSelector::Dog.all_sizes[input_one]
+      self.list_all_breeds(size)
+    end
   end
 
   def list_all_breeds(size)
@@ -58,9 +62,13 @@ class DogBreedSelector::CLI
   def choose_and_show_dog_breed
 	   puts "Choose the number of the breed you're interested in, or type 'x' to exit."
      input_two = gets.strip.to_i-1
-     breed = @breed_names[input_two]
-     self.add_qualities(breed)
-     self.list_qualities(breed)
+     if input_two >= @breed_names.length
+       self.choose_and_show_dog_breed
+     else
+       breed = @breed_names[input_two]
+       self.add_qualities(breed)
+       self.list_qualities(breed)
+     end
    end
 
    #breed.rb one object per breed (@name, @size, @desc (string), @url)
@@ -77,23 +85,24 @@ class DogBreedSelector::CLI
    end
 
    def list_qualities(breed)
-     DogBreedSelector::Dog.all.each do |dog|
+     DogBreedSelector::Dog.all.map do |dog|
        if dog.breed == breed
-         if dog.desc == nil
-           puts "There is no available information for this breed at the moment. Please try another."
+         if dog.desc == ""
+           puts "Sorry, there is no current information at this time. Please try again."
+         else
+           puts "\nIf you'd like a dog who ... #{dog.desc}"
          end
-       else
-         puts "\nIf you'd like a dog who ... #{dog.desc}"
-      end
-    end
+       end
+     end
    end
+
 
 
    def greeting
     puts "\n\nWoof! Woof!\n\nU ´ᴥ` U\n\n"
-    # sleep(5)
+    sleep(5)
     puts "Looking to adopt a new furry member of the family?\n\nUncertain of which dog breed is best for you and your family?\n\nYou've come to the right place!\n\n"
-    # sleep(5)
+    sleep(5)
     puts "With 180 dog breeds to choose from, the Dog Breed Selector will help you make the right choice!\n\nPlease wait a few seconds for the application to load."
   end
 
