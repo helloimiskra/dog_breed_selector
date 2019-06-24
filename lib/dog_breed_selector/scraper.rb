@@ -13,7 +13,8 @@ class DogBreedSelector::Scraper
     # #if statement for number not wanted
     # #fri-sun soft requirement (21-23) Monday morn.
 
-
+    # size_urls = DogBreedSelector::Scraper.scrape_size_urls(main_url)
+    # DogBreedSelector::Scraper.scrape_size_names(size_urls)
     def self.scrape_size_urls(main_url)
       doc = Nokogiri::HTML(open(main_url))
       size_urls = doc.css('tr td a').map{|x| x.attr('href') if x.attr('href').include?('index')}.uniq!.compact
@@ -27,8 +28,8 @@ class DogBreedSelector::Scraper
           doc.css('div#content').map do |doc|
           breed_size = doc.css("h1.clear").text.split("Dog Breed Reviews: ")[1]
           doc.css('tr td').map do |dog|
-            breed_name = dog.css('a').text
-            breed_url  = "#{dog.css('a').attr('href')}"
+            breed_name = dog.css('a').text unless dog.css('a').text.include?("breeds")
+            breed_url  = "#{dog.css('a').attr('href')}" unless "#{dog.css('a').attr('href')}".include?("index")
             dogs << {breed: breed_name, size: breed_size, url: breed_url}
             DogBreedSelector::Dog.new(breed_size, breed_name, breed_url)
           end

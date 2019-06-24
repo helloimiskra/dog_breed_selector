@@ -1,11 +1,11 @@
 require_relative './scraper.rb'
 class DogBreedSelector::Dog
-  attr_accessor :size, :breed, :breed_url, :desc, :breed_size
+  attr_accessor :size, :breed, :breed_url, :desc, :size
 
   @@all = []
 
-  def initialize(breed_size = nil, breed = nil, breed_url = nil, desc = nil)
-    @breed, @breed_url, @breed_size, @desc = breed, breed_url, breed_size, desc
+  def initialize(size = nil, breed = nil, breed_url = nil, desc = nil)
+    @breed, @breed_url, @size, @desc = breed, breed_url, size, desc
     @@all << self
   end
 
@@ -15,30 +15,36 @@ class DogBreedSelector::Dog
 
   def self.all_sizes
     @@all.map do |dog|
-      dog.breed_size
+      dog.size
+    end.uniq
+  end
+
+  def self.list_breeds(size)
+    @@all.map do |dog|
+      if dog.size == size
+        dog.breed unless dog.breed == nil
+      end
+    end.compact
+  end
+
+  def self.desc_by_breed(breed)
+    @@all.map do |dog|
+      if dog.breed == breed
+        dog.desc
+      end
     end
   end
 
-  def self.load_sizes
-    main_url = "https://www.yourpurebredpuppy.com/dogbreeds/"
-    size_urls = DogBreedSelector::Scraper.scrape_from_main(main_url)
-    dog_sizes = DogBreedSelector::Scraper.scrape_from_size(size_urls)
-    dog_sizes
-  end
-
-  def self.desc_by_breed(size_input, breed_input)
-    @@all.map{|dog| dog.desc}[size_input][breed_input]
+  def add_dog_desc(desc)
+    dog.each do |desc, list|
+      self.send("#{desc}=", list)
+    end
+    self
   end
 
   def self.delete_all
     @@all.clear
   end
 
-  def self.find_or_name(name)
-    breed = @@all.find {|breed| breed.name == name}
-    if breed == nil
-      breed.name = name
-    end
-  end
 
 end

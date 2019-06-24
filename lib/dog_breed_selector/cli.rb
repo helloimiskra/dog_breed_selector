@@ -5,11 +5,11 @@ require_relative './scraper.rb'
 class DogBreedSelector::CLI
   attr_accessor :dog_sizes, :dog_breeds, :size_urls, :breed_size, :dogs, :breed_names
 
+  MAIN_URL = "https://www.yourpurebredpuppy.com/dogbreeds/"
+
   def call
     self.greeting
-    main_url = "https://www.yourpurebredpuppy.com/dogbreeds/"
-    @size_urls = DogBreedSelector::Scraper.scrape_size_urls(main_url)
-    @dog_sizes = DogBreedSelector::Scraper.scrape_size_names(size_urls)
+    self.make_dogs(MAIN_URL)
     loop do
       user_input = main_menu
         if user_input.include?("x")
@@ -18,7 +18,7 @@ class DogBreedSelector::CLI
         else
         self.list_dog_sizes
 	      self.choose_dog_size
-        self.choose_dog_breed
+        self.choose_and_show_dog_breed
       end
     end
   end
@@ -29,60 +29,71 @@ class DogBreedSelector::CLI
     return input
   end
 
+  def make_dogs(main_url)
+    size_urls = DogBreedSelector::Scraper.scrape_size_urls(main_url)
+    DogBreedSelector::Scraper.scrape_size_names(size_urls)
+  end
+
   def list_dog_sizes
-    @dog_sizes.map.with_index(1) do |size, i|
+    dog_sizes = DogBreedSelector::Dog.all_sizes
+    dog_sizes.map.with_index(1) do |size, i|
       puts "#{i}. #{size}"
     end
   end
 
   def choose_dog_size
     puts "Enter the number of the dog breed size you prefer below or type 'x' to exit."
-    @input_one = gets.strip.to_i-1
-    @size = @dog_sizes[@input_one]
-    self.list_all_breeds(@size_urls, @size)
+    input_one = gets.strip.to_i-1
+    size = DogBreedSelector::Dog.all_sizes[input_one]
+    self.list_all_breeds(size)
   end
 
-  def list_all_breeds(size_urls, size)
-    @breed_names = DogBreedSelector::Scraper.scrape_breed_names(size_urls, size)
-    @breed_names.map.with_index(1) do |breed, i|
+  def list_all_breeds(size)
+    breed_names = DogBreedSelector::Dog.list_breeds(size)
+    breed_names.map.with_index(1) do |breed, i|
       puts "#{i}. #{breed}"
     end
   end
 
-  def choose_dog_breed
+  def choose_and_show_dog_breed
 	   puts "Choose the number of the breed you're interested in, or type 'x' to exit."
-     @input_two = gets.strip.to_i-1
-     @breed = @breed_names[@input_two]
-     list = list_qualities(@breed_url, @breed_names, @breed).map{|list| puts "\nIf you'd like a dog who ... #{list}"}
-     if list == []
-       puts "There is no available information for this breed at the moment. Please try another."
-     else
-       list
-     end
+     input_two = gets.strip.to_i-1
+     breed = breed_names[input_two]
+     self.add_qualities(breed)
+     self.list_qualities(breed)
    end
-   #
-   #
-  #    each {|desc| puts "\nIf you'd like a dog who ... #{desc}\n"}
-  #    if list == []
-  #      puts "There is no available information for this breed at the moment. Please try another."
-  #    else
-  #      list
-  #    end
-  #  end
 
    #breed.rb one object per breed (@name, @size, @desc (string), @url)
    #
 
-   def list_qualities(breed_url, breed_names, breed)
-     DogBreedSelector::Scraper.scrape_from_breed_url(breed_url, breed_names, breed)
+   def add_qualities(breed)
+     DogBreedSelector::Dog.all.each do |dog|
+       if dog.breed == breed
+         dog = DogBreedSelect::Scraper.scrape_breed_page(dog.breed_url)
+         dog.add_dog_desc(desc)
+       end
+     end
    end
+
+   def list_qualities(breed)
+     DogBreedSelector::Dog.all.each do |dog|
+       if dog.breed == breed
+         if dog.desc == nil
+           puts "There is no available information for this breed at the moment. Please try another."
+         end
+       else
+         puts "\nIf you'd like a dog who ... #{dog.desc}"
+      end
+    end
+   end
+
 
    def greeting
     puts "\n\nWoof! Woof!\n\nU ´ᴥ` U\n\n"
     # sleep(5)
     puts "Looking to adopt a new furry member of the family?\n\nUncertain of which dog breed is best for you and your family?\n\nYou've come to the right place!\n\n"
     # sleep(5)
-    puts "With 180 dog breeds to choose from, the Dog Breed Selector will help you make the right choice!\n\nPlease wait a few minutes for the application to load."
+    puts "With 180 dog breeds to choose from, the Dog Breed Selector will help you make the right choice!\n\nPlease wait a few seconds for the application to load."
   end
 
   def goodbye
