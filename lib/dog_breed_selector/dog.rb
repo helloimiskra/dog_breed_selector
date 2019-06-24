@@ -1,6 +1,6 @@
 require_relative './scraper.rb'
 class DogBreedSelector::Dog
-  attr_accessor :size, :breed, :breed_url, :desc, :size
+  attr_accessor :size, :breed, :breed_url, :desc
 
   @@all = []
 

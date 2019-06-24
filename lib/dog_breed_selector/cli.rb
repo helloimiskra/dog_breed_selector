@@ -14,7 +14,7 @@ class DogBreedSelector::CLI
       user_input = main_menu
         if user_input.include?("x")
           goodbye
-          return
+        return
         else
         self.list_dog_sizes
 	      self.choose_dog_size
@@ -43,11 +43,13 @@ class DogBreedSelector::CLI
 
   def choose_dog_size
     puts "Enter the number of the dog breed size you prefer below or type 'x' to exit."
-    input_one = gets.strip.to_i-1
-    if input_one >= 6 || input_one == 0
+    input_one = gets.strip
+    if input_one =~ /[[:alpha:]]/
+      self.choose_dog_size
+    elsif input_one.to_i-1 >= 6 || input_one.to_i-1 == -1
       self.choose_dog_size
     else
-      size = DogBreedSelector::Dog.all_sizes[input_one]
+      size = DogBreedSelector::Dog.all_sizes[input_one.to_i-1]
       self.list_all_breeds(size)
     end
   end
@@ -61,18 +63,17 @@ class DogBreedSelector::CLI
 
   def choose_and_show_dog_breed
 	   puts "Choose the number of the breed you're interested in, or type 'x' to exit."
-     input_two = gets.strip.to_i-1
-     if input_two >= @breed_names.length
+     input_two = gets.strip
+     if input_two =~ /[[:alpha:]]/
+       self.choose_and_show_dog_breed
+     elsif input_two.to_i-1 >= @breed_names.length || input_two.to_i-1 == -1
        self.choose_and_show_dog_breed
      else
-       breed = @breed_names[input_two]
+       breed = @breed_names[input_two.to_i-1]
        self.add_qualities(breed)
        self.list_qualities(breed)
      end
    end
-
-   #breed.rb one object per breed (@name, @size, @desc (string), @url)
-   #
 
    def add_qualities(breed)
      DogBreedSelector::Dog.all.select do |dog|
