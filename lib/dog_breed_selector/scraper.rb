@@ -30,10 +30,12 @@ class DogBreedSelector::Scraper
             breed_name = dog.css('a').text
             breed_url  = "#{dog.css('a').attr('href')}"
             dogs << {breed: breed_name, size: breed_size, url: breed_url}
+            DogBreedSelector::Dog.new(breed_size, breed_name, breed_url)
           end
         end
         dogs
       end
+    end
 
       def self.scrape_breed_page(breed_url)
         dog = {}
